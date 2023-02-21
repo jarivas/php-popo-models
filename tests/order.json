@@ -1,0 +1,219 @@
+{
+    "type": "checkout",
+    "order_id": "fastcheckout-order",
+    "currency": "EUR",
+    "amount": 37485,
+    "description": "Test Order Description",
+    "payment_options": {
+        "notification_method": "POST",
+        "notification_url": "https://www.example.com/webhooks/orders",
+        "feed_url": "https://www.example.com/webhooks/other-updates",
+        "redirect_url": "https://www.example.com/order/success",
+        "cancel_url": "https://www.example.com/order/failed",
+        "settings": {
+            "fco": {
+                "redirect_mode": "redirect",
+                "coupons": {
+                    "disabled": false
+                },
+                "cart": {
+                    "disabled": false
+                },
+                "shipping": {
+                    "address": {
+                        "required": true
+                    }
+                },
+                "checkout": {
+                    "customer": {
+                        "enabled": true
+                    }
+                },
+                "issuers_display_mode": "select",
+                "group_cards": true
+            }
+        }
+    },
+    "custom_fields": [
+        {
+            "name": "acceptagreements",
+            "type": "checkbox",
+            "label": "This label",
+            "description_right": {
+                "value": [
+                    {
+                        "en": "I accept the <a href='http://test.nl' target='_blank'>terms and conditions</a>"
+                    }
+                ]
+            }
+        },
+        {
+            "standard_type": "newsletter",
+            "validation": {
+                "type": "regex"
+            }
+        }
+    ],
+    "customer": {
+        "locale": "nl_NL",
+        "first_name": "Test",
+        "last_name": "Rejected",
+        "address1": "Hogehilweg",
+        "house_number": "8",
+        "zip_code": "1101 CC",
+        "city": "Amsterdam",
+        "country": "NL",
+        "email": "example@multisafepay.com"
+    },
+    "delivery": {
+        "first_name": "Test",
+        "last_name": "Rejected",
+        "address1": "Hogehilweg",
+        "house_number": "8",
+        "zip_code": "1101 CC",
+        "city": "Amsterdam",
+        "country": "NL",
+        "phone": "0612345678",
+        "email": "example@multisafepay.com"
+    },
+    "shopping_cart": {
+        "items": [
+            {
+                "name": "Geometric Candle Holders",
+                "description": "",
+                "unit_price": 90,
+                "quantity": 3,
+                "merchant_item_id": "1111",
+                "tax_table_selector": "BTW21",
+                "weight": {
+                    "unit": "KG",
+                    "value": 12
+                }
+            },
+            {
+                "name": "Nice apple",
+                "description": "",
+                "unit_price": 35,
+                "quantity": 1,
+                "merchant_item_id": "666666",
+                "tax_table_selector": "BTW9",
+                "weight": {
+                    "unit": "KG",
+                    "value": 20
+                }
+            },
+            {
+                "name": "Flat Rate - Fixed",
+                "description": "Shipping",
+                "unit_price": 10,
+                "quantity": 1,
+                "merchant_item_id": "msp-shipping",
+                "tax_table_selector": "none",
+                "weight": {
+                    "unit": "KG",
+                    "value": 0
+                }
+            }
+        ]
+    },
+    "checkout_options": {
+        "tax_tables": {
+            "default": {
+                "shipping_taxed": true,
+                "rate": 0.21
+            },
+            "alternate": [
+                {
+                    "name": "BTW21",
+                    "standalone": true,
+                    "rules": [
+                        {
+                            "rate": 0.21
+                        }
+                    ]
+                },
+                {
+                    "name": "BTW9",
+                    "standalone": true,
+                    "rules": [
+                        {
+                            "rate": 0.09
+                        }
+                    ]
+                },
+                {
+                    "name": "BTW6",
+                    "standalone": true,
+                    "rules": [
+                        {
+                            "rate": 0.06
+                        }
+                    ]
+                },
+                {
+                    "name": "BTW0",
+                    "standalone": true,
+                    "rules": [
+                        {
+                            "rate": 0
+                        }
+                    ]
+                },
+                {
+                    "name": "none",
+                    "standalone": false,
+                    "rules": [
+                        {
+                            "rate": 0
+                        }
+                    ]
+                },
+                {
+                    "name": "FEE",
+                    "standalone": false,
+                    "rules": [
+                        {
+                            "rate": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        "no_shipping_method": false,
+        "use_shipping_notification": false,
+        "shipping_methods": {
+            "pickup": {
+                "name": "PostNL pickup points",
+                "provider": "PostNL",
+                "price": "6"
+            },
+            "flat_rate_shipping": [
+                {
+                    "name": "TNT - verzending NL",
+                    "price": "7",
+                    "allowed_areas": [
+                        "NL",
+                        "ES"
+                    ]
+                },
+                {
+                    "name": "Seur - Spain",
+                    "price": "7",
+                    "allowed_areas": [
+                        "NL",
+                        "ES"
+                    ]
+                },
+                {
+                    "name": "TNT - verzending BE en FR",
+                    "price": "12",
+                    "excluded_areas": [
+                        "NL",
+                        "FR",
+                        "ES"
+                    ]
+                }
+            ]
+        }
+    }
+}
