@@ -1,5 +1,5 @@
 {
-    "name": "multisafepay/php-cast-json-models",
+    "name": "jarivas/php-popo-models",
     "version": "1.0.0",
     "description": "A simple and direct way of casting json objects to models",
     "type": "library",
@@ -7,7 +7,7 @@
     "authors": [
       {
         "name": "Jose A Rivas",
-        "email": "jose.rivas@multisafepay.com"
+        "email": "me@jarivas.work"
       }
     ],
     "autoload": {
