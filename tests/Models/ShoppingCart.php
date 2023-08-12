@@ -8,6 +8,6 @@ use CastModels\Model;
 
 class ShoppingCart extends Model
 {
-    /** \Tests\Models\ShoppingCartItem */
+    /** @var \Tests\Models\ShoppingCartItem[] */
     public array $items;
 }

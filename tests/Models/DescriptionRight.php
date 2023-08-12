@@ -8,6 +8,6 @@ use CastModels\Model;
 
 class DescriptionRight extends Model
 {
-    /** \Tests\Models\DescriptionRightItem */
+    /** @var \Tests\Models\DescriptionRightItem[] */
     public array $value;
 }

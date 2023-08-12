@@ -19,7 +19,7 @@ class Order extends Model
     public Delivery $delivery;
     public CheckoutOptions $checkout_options;
     public ShoppingCart $shopping_cart;
-    /** \Tests\Models\CustomField */
+    /** @var \Tests\Models\CustomField[] */
     public array $custom_fields;
     public Affiliate $affiliate;
     public SecondChance $second_chance;
@@ -38,10 +38,10 @@ class Order extends Model
     public string $financial_status;
     public string $fastcheckout;
     public string $modified;
-    /** \Tests\Feature\Model\Cost */
+    /**  @var \Tests\Feature\Model\Cost[] */
     public array $costs;
-    /** \Tests\Feature\Model\RelatedTransaction */
+    /** @var \Tests\Feature\Model\RelatedTransaction[] */
     public array $related_transactions;
-    /** \Tests\Feature\Model\PaymentMethod */
+    /** @var \Tests\Feature\Model\PaymentMethod[] */
     public array $payment_methods;
 }

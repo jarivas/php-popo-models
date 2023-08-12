@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "bmewburn.vscode-intelephense-client",
+        "zobo.php-intellisense",
+        "ecodes.vscode-phpmd",
+        "wongjn.php-sniffer"
+    ]
+  }

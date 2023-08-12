@@ -10,7 +10,7 @@ class RelatedTransaction extends Model
 {
     public int $amount;
 
-    /** \Tests\Feature\Model\Cost */
+    /** @var \Tests\Feature\Model\Cost[] */
     public array $costs;
     public string $created;
     public string $currency;

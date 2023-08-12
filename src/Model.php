@@ -8,11 +8,15 @@ use ReflectionProperty;
 use JsonSerializable;
 use stdClass;
 use ReflectionNamedType;
-use ReflectionUnionType;
-use ReflectionIntersectionType;
 
 abstract class Model implements JsonSerializable
 {
+
+
+    /**
+     * @param mixed[]|string $data
+     * @return Model[]
+     * */
     public static function collection(array|string $data): array
     {
         $collection = [];
@@ -27,22 +31,33 @@ abstract class Model implements JsonSerializable
 
         foreach ($data as $item) {
             if (! empty($item)) {
+                // @phpstan-ignore-next-line
                 $collection[] = new static($item);
             }
         }
 
         return $collection;
-    }
 
-    public function __construct(array|stdClass $data = [])
+    }//end collection()
+
+
+    /** @param mixed[]|stdClass $data */
+    public function __construct(array|stdClass $data=[])
     {
         $this->update($data);
-    }
 
-    public function update(array|stdClass $data = [])
+    }//end __construct()
+
+
+    /** @param mixed[]|stdClass $data */
+    public function update(array|stdClass $data=[]): void
     {
         if (empty($data)) {
             return;
+        }
+
+        if (is_object($data)) {
+            $data = get_object_vars($data);
         }
 
         foreach ($data as $k => $v) {
@@ -50,8 +65,11 @@ abstract class Model implements JsonSerializable
                 $this->setProperty($k, $v);
             }
         }
-    }
 
+    }//end update()
+
+
+    /** @return mixed[] */
     public function toArray(): array
     {
         $result = [];
@@ -61,31 +79,48 @@ abstract class Model implements JsonSerializable
         }
 
         return $result;
-    }
 
+    }//end toArray()
+
+
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return $this->toArray();
-    }
 
+    }//end jsonSerialize()
+
+
+    /** @return string */
     public function __toString()
     {
-        return json_encode($this);
-    }
+        $result = json_encode($this);
 
-    private function setProperty(string $propertyName, mixed $value)
+        return empty($result) ? '' : $result;
+
+    }//end __toString()
+
+
+    private function setProperty(string $propertyName, mixed $value): void
     {
         $rProperty = new ReflectionProperty($this, $propertyName);
-        $rType = $rProperty->getType();
+        $rType     = $rProperty->getType();
+
+        if (empty($rType) || !$rType instanceof ReflectionNamedType) {
+            return;
+        }
 
         if ($rType->isBuiltin()) {
             $this->setPropertyBuiltIn($rProperty, $propertyName, $value);
-        } else {
-            $this->setPropertyHelper($rType, $propertyName, $value);
+            return;
         }
-    }
 
-    private function setPropertyBuiltIn(ReflectionProperty $rProperty, string $propertyName, mixed $value)
+        $this->setPropertyHelper($rType->getName(), $propertyName, $value);
+
+    }//end setProperty()
+
+
+    private function setPropertyBuiltIn(ReflectionProperty $rProperty, string $propertyName, mixed $value): void
     {
         if (is_object($value)) {
             $value = (array) $value;
@@ -93,12 +128,14 @@ abstract class Model implements JsonSerializable
 
         if (is_array($value)) {
             $this->setArray($rProperty, $propertyName, $value);
-        } else {
-            $this->$propertyName = $value;
         }
-    }
 
-    private function setArray(ReflectionProperty $rProperty, string $propertyName, mixed $value)
+        $this->$propertyName = $value;
+
+    }//end setPropertyBuiltIn()
+
+
+    private function setArray(ReflectionProperty $rProperty, string $propertyName, mixed $value): void
     {
         if (empty($value)) {
             return;
@@ -133,22 +170,24 @@ abstract class Model implements JsonSerializable
         if (! empty($array)) {
             $this->$propertyName = $array;
         }
-    }
+
+    }//end setArray()
+
 
     private function getClassNameFromPhpDoc(string $phpDoc): string
     {
-        $pattern = '/\s+([\w|\\\\]+)\s*\*/m';
+        $pattern = '/\s+([\w|\\\\]+)\[/m';
         $matches = [];
 
         preg_match($pattern, $phpDoc, $matches, PREG_OFFSET_CAPTURE);
 
         return $matches[1][0];
-    }
 
-    private function setPropertyHelper(ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType $rType, string $propertyName, mixed $value)
+    }//end getClassNameFromPhpDoc()
+
+
+    private function setPropertyHelper(string $type, string $propertyName, mixed $value): void
     {
-        $type = $rType->getName();
-
         if (method_exists($type, 'tryFrom')) {
             $this->$propertyName = $type::tryFrom($value);
             return;
@@ -160,7 +199,9 @@ abstract class Model implements JsonSerializable
             $this->$propertyName = new $type($value);
             return;
         }
-    }
+
+    }//end setPropertyHelper()
+
 
     private function toArrayHelper(mixed $value): mixed
     {
@@ -176,11 +217,16 @@ abstract class Model implements JsonSerializable
             return $value->toArray();
         }
 
-        if (method_exists($value, 'tryFrom')) {
-            return $value->value;
-        }
-    }
+        // @phpstan-ignore-next-line
+        return method_exists($value, 'tryFrom') ? $value->value : null;
 
+}//end toArrayHelper()
+
+
+    /**
+     * @param mixed[] $value
+     * @return mixed[]
+     * */
     private function toArrayHelperArray(array $value): array
     {
         $result = [];
@@ -189,10 +235,13 @@ abstract class Model implements JsonSerializable
             return $result;
         }
 
-        foreach($value as $item) {
+        foreach ($value as $item) {
             $result[] = $this->toArrayHelper($item);
         }
 
         return $result;
-    }
-}
+
+    }//end toArrayHelperArray()
+
+
+}//end class

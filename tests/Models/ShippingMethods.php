@@ -10,6 +10,6 @@ class ShippingMethods extends Model
 {
     public ShippingMethodPickup $pickup;
 
-    /** \Tests\Models\ShippingMethod */
+    /** @var \Tests\Models\ShippingMethod[] */
     public array $flat_rate_shipping;
 }

@@ -10,6 +10,6 @@ class TaxItem extends Model
 {
     public string $name;
     public bool $standalone;
-    /** \Tests\Models\TaxRule */
+    /** @var \Tests\Models\TaxRule[] */
     public array $rules;
 }

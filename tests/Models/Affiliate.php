@@ -8,6 +8,6 @@ use CastModels\Model;
 
 class Affiliate extends Model
 {
-    /** \Tests\Models\AffiliateSplitPayment */
+    /** @var \Tests\Models\AffiliateSplitPayment[] */
     public array $split_payments;
 }

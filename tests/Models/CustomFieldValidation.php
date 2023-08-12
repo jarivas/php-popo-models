@@ -10,6 +10,6 @@ class CustomFieldValidation extends Model
 {
     public string $type;
     public string $data;
-    /** \Tests\Models\CustomFieldValidationError */
+    /** @var \Tests\Models\CustomFieldValidationError[] */
     public array $error;
 }

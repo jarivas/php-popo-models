@@ -9,6 +9,6 @@ use CastModels\Model;
 class TaxTables extends Model
 {
     public TaxTableSelector $default;
-    /** \Tests\Models\TaxItem */
+    /** @var \Tests\Models\TaxItem[] */
     public array $alternate;
 }
