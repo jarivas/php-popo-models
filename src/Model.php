@@ -14,8 +14,8 @@ abstract class Model implements JsonSerializable
 
 
     /**
-     * @param mixed[]|string $data
-     * @return Model[]
+     * @param array<array<string, mixed>>|string $data
+     * @return static[]
      * */
     public static function collection(array|string $data): array
     {
@@ -41,7 +41,7 @@ abstract class Model implements JsonSerializable
     }//end collection()
 
 
-    /** @param mixed[]|stdClass $data */
+    /** @param array<string, mixed>|stdClass $data */
     public function __construct(array|stdClass $data=[])
     {
         $this->update($data);
@@ -49,7 +49,7 @@ abstract class Model implements JsonSerializable
     }//end __construct()
 
 
-    /** @param mixed[]|stdClass $data */
+    /** @param array<string, mixed>|stdClass $data */
     public function update(array|stdClass $data=[]): void
     {
         if (empty($data)) {
@@ -69,7 +69,7 @@ abstract class Model implements JsonSerializable
     }//end update()
 
 
-    /** @return mixed[] */
+    /** @return array<string, mixed> */
     public function toArray(): array
     {
         $result = [];
@@ -150,7 +150,7 @@ abstract class Model implements JsonSerializable
 
         $className = $this->getClassNameFromPhpDoc($phpDoc);
 
-        if (! strlen($className)) {
+        if (is_bool($className)) {
             $this->$propertyName = $value;
             return;
         }
@@ -160,12 +160,7 @@ abstract class Model implements JsonSerializable
             return;
         };
 
-        $array = [];
-        foreach ($value as $v) {
-            if (! empty($v)) {
-                $array[] = new $className($v);
-            }
-        }
+        $array = array_map(fn ($v) => new $className($v), $value);
 
         if (! empty($array)) {
             $this->$propertyName = $array;
@@ -174,14 +169,14 @@ abstract class Model implements JsonSerializable
     }//end setArray()
 
 
-    private function getClassNameFromPhpDoc(string $phpDoc): string
+    private function getClassNameFromPhpDoc(string $phpDoc): string|false
     {
         $pattern = '/\s+([\w|\\\\]+)\[/m';
         $matches = [];
 
         preg_match($pattern, $phpDoc, $matches, PREG_OFFSET_CAPTURE);
 
-        return $matches[1][0];
+        return empty($matches) ? false : $matches[1][0];
 
     }//end getClassNameFromPhpDoc()
 
