@@ -1,7 +1,6 @@
 {
     "recommendations": [
-        "bmewburn.vscode-intelephense-client",
-        "zobo.php-intellisense",
+        "DEVSENSE.composer-php-vscode",
         "ecodes.vscode-phpmd",
         "wongjn.php-sniffer"
     ]

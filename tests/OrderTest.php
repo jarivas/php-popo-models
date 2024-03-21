@@ -10,9 +10,12 @@ use Tests\Models\CheckoutOptions;
 use Tests\Models\CustomField;
 use Tests\Models\Order;
 use Tests\Models\ShoppingCart;
+use Tests\Models\ShoppingCartItem;
 
 class OrderTest extends TestCase
 {
+
+
     public function testPaymentOptions()
     {
         $data = $this->getData();
@@ -23,7 +26,9 @@ class OrderTest extends TestCase
         $this->assertInstanceOf(PaymentOptions::class, $paymentOptions);
 
         $this->assertEqualsCanonicalizing($data, $paymentOptions->toArray());
-    }
+
+    }//end testPaymentOptions()
+
 
     public function testCustomFields()
     {
@@ -35,7 +40,9 @@ class OrderTest extends TestCase
         $this->assertInstanceOf(CustomField::class, $customFields[0]);
 
         $this->assertEqualsCanonicalizing($data[0], $customFields[0]->toArray());
-    }
+
+    }//end testCustomFields()
+
 
     public function testCustomer()
     {
@@ -43,11 +50,13 @@ class OrderTest extends TestCase
         $data = $data['customer'];
 
         $customer = new Customer($data);
-        
+
         $this->assertInstanceOf(Customer::class, $customer);
 
         $this->assertEqualsCanonicalizing($data, $customer->toArray());
-    }
+
+    }//end testCustomer()
+
 
     public function testDelivery()
     {
@@ -55,11 +64,13 @@ class OrderTest extends TestCase
         $data = $data['delivery'];
 
         $delivery = new Delivery($data);
-        
+
         $this->assertInstanceOf(Delivery::class, $delivery);
 
         $this->assertEqualsCanonicalizing($data, $delivery->toArray());
-    }
+
+    }//end testDelivery()
+
 
     public function testShoppinCart()
     {
@@ -67,11 +78,17 @@ class OrderTest extends TestCase
         $data = $data['shopping_cart'];
 
         $shoppingCart = new ShoppingCart($data);
-        
+
         $this->assertInstanceOf(ShoppingCart::class, $shoppingCart);
 
+        foreach ($shoppingCart->items as $item) {
+            $this->assertInstanceOf(ShoppingCartItem::class, $item);
+        }
+
         $this->assertEqualsCanonicalizing($data, $shoppingCart->toArray());
-    }
+
+    }//end testShoppinCart()
+
 
     public function testCheckoutOptions()
     {
@@ -83,18 +100,22 @@ class OrderTest extends TestCase
         $this->assertInstanceOf(CheckoutOptions::class, $checkoutOptions);
 
         $this->assertEqualsCanonicalizing($data, $checkoutOptions->toArray());
-    }
+
+    }//end testCheckoutOptions()
+
 
     public function testOrder()
     {
         $data = $this->getData();
 
         $order = new Order($data);
-        
+
         $this->assertInstanceOf(Order::class, $order);
 
         $this->assertEqualsCanonicalizing($data, $order->toArray());
-    }
+
+    }//end testOrder()
+
 
     private function getData(): array
     {
@@ -112,6 +133,8 @@ class OrderTest extends TestCase
         $this->assertIsArray($data);
 
         return $data;
-    }
-}
 
+    }//end getData()
+
+
+}//end class
